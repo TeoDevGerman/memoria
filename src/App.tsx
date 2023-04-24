@@ -1,33 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react'
 import './App.css'
+import { Link } from 'react-router-dom'
+import memoDB from './scss/db'
+
+interface TodoItem {
+  id: number
+  deadline: Date
+  text: string
+  progress: number
+}
+// dashboard with all todos in a grid // almost done
+// todo detail page with edit // done
+// todo create page with button
+// add impressum // done
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [memos, setMemos] = useState<TodoItem[]>([])
 
+  useEffect(() => {
+    setMemos(memoDB.getMemos())
+  }, [])
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <h1>Memoria</h1>
+      {/* // todo list */}
+      <div className='memosTable'>
+        <div className="row row-cols-3">
+          {memos.map((memo) => (
+            <Link to={`MemoPage/${memo.id}`}>
+              {/* wir sind hier im Grid */}
+              <div key={memo.id}>
+                <h2>{memo.text}</h2>
+                <p>{memo.deadline.toISOString()}</p>
+                <p>{memo.progress}%</p>
+              </div>
+              {/* wir sind hier im Grid */}
+            </Link>
+          ))}
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <button className="btn btn-primary">add new Memo</button>
+      <footer>
+        <Link to="/Impressum">
+          Impressum
+        </Link>
+      </footer>
     </>
   )
 }

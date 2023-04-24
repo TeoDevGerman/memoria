@@ -11,6 +11,16 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
+.memosTable {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 800px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+  display: grid;
+}
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
