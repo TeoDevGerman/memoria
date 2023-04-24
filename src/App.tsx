@@ -41,7 +41,9 @@ function App() {
           ))}
         </div>
       </div>
-      <button className="btn btn-primary">add new Memo</button>
+      <Link to="/AddMemo">
+        <button type="button" className="btn btn-primary">Add Memo</button>
+      </Link>
       <footer>
         <Link to="/Impressum">
           Impressum

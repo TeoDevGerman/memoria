@@ -9,6 +9,7 @@ class MemoList {
     }
 
     addMemo(memo: Memo) {
+        console.log('remove2')
         this.memos.push(memo);
     }
 
@@ -39,13 +40,13 @@ class MemoList {
             this.memos.splice(this.indexof(memo), 1);
         }
     }
-    fromCookies(){
+    fromCookies() {
         const memos = document.cookie.split(';');
         for (let i = 0; i < memos.length; i++) {
             const memo = memos[i].split('=');
-            if(memo.length < 2) continue;
+            if (memo.length < 2) continue;
             const memoObject = JSON.parse(memo[1]);
-            const tempMemo : Memo = {
+            const tempMemo: Memo = {
                 id: memoObject.id,
                 deadline: new Date(memoObject.deadline),
                 text: memoObject.text,
@@ -54,11 +55,18 @@ class MemoList {
             this.addMemo(tempMemo);
         }
     }
-    toCookies(){
+    toCookies() {
+        document.cookie.split(";").forEach((c) => {
+            document.cookie = c
+                .replace(/^ +/, "")
+                .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        });
+        console.log(this.memos.length)
         for (let i = 0; i < this.memos.length; i++) {
             const memo = this.memos[i];
             document.cookie = memo.id + '=' + JSON.stringify(memo);
         }
+
     }
 }
 

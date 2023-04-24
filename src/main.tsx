@@ -26,6 +26,10 @@ const router = createBrowserRouter([
     element: <Impressum />,
   },
   {
+    path: "/AddMemo",
+    element: <AddMemo />,
+  },
+  {
     path: "MemoPage/:memoId",
     element: <MemoPage />,
     loader: ({ params }: LoaderFunctionArgs) => {
@@ -45,6 +49,7 @@ const router = createBrowserRouter([
 import Impressum from './Impressum.tsx'
 import MemoPage from './MemosPage.tsx'
 import memoDB from './scss/db.ts'
+import AddMemo from './AddMemo.tsx'
 
 
 

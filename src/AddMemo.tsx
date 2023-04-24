@@ -5,14 +5,14 @@ import { Memo } from './scss/types.ts'
 import memoDB from './scss/db.ts'
 
 
-function MemoPage() {
+function AddMemo() {
   const navigate = useNavigate()
-  const memo = useLoaderData() as Memo
 
   const handle = (event: React.SyntheticEvent) => {
     event.preventDefault()
     if (event.target === null) return
     //console.log(event.target)
+   
     const target = event.target as typeof event.target & {
       text: { value: string };
       deadline: { value: string };
@@ -24,18 +24,20 @@ function MemoPage() {
     console.log(date)
     const progress = target.progress.value;
     console.log(progress)
-    const i = memoDB.indexof(memo)
-    memoDB.memos[i].text = text
-    memoDB.memos[i].deadline = new Date(date)
-    memoDB.memos[i].progress = Number(progress)
+    const memo: Memo = {
+      id: memoDB.memos.length,
+      text: text,
+      deadline: new Date(date),
+      progress: Number(progress)
+    }
+    memoDB.addMemo(memo)
     memoDB.toCookies()
     navigate(-1)
   }
   return (
     <>
-      <h1>MemoPage</h1>
+      <h1>AddMemoPage</h1>
       {/* // todo list */}
-      <p>{memo.deadline.toISOString()}</p>
       {/* create a form to edit the memo */}
       <form id='editForm' onSubmit={handle}>
         <div className="mb-3">
@@ -50,17 +52,10 @@ function MemoPage() {
           <label htmlFor="progress" className="form-label">Progress</label>
           <input type="number" className="form-control" id="progress" name="progress" />
         </div>
-        <button type="submit" className="btn btn-primary">save</button>
-        <button type='button' onClick={(event : React.SyntheticEvent) =>{
-          event.preventDefault()
-          console.log('remove')
-          memoDB.removeMemo(memo)
-          memoDB.toCookies()
-          navigate(-1)
-        }} className="btn btn-primary">remove</button>
+        <button type="submit" className="btn btn-primary">add</button>
       </form>
     </>
   )
 }
 
-export default MemoPage
+export default AddMemo
