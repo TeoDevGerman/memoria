@@ -35,20 +35,21 @@ function MemoPage() {
     <>
       <h1>MemoPage</h1>
       {/* // todo list */}
-      <p>{memo.deadline.toISOString()}</p>
-      {/* create a form to edit the memo */}
+      <p>{memo.deadline.toDateString()}</p>
+      {/* creates a form to edit the memo and shows already existing Information */}
       <form id='editForm' onSubmit={handle}>
         <div className="mb-3">
-          <label htmlFor="text" className="form-label">Text</label>
-          <input type="text" className="form-control" id="text" aria-describedby="text" name="text"/>
+          <label htmlFor="text" className="form-label">Deine Memo</label>
+          <input defaultValue={memo.text} type="text" className="form-control" id="text" aria-describedby="text" name="text"/>
         </div>
         <div className="mb-3">
-          <label htmlFor="deadline" className="form-label">Deadline</label>
-          <input type="date" className="form-control" id="deadline" name="deadline"/>
+          <label htmlFor="deadline" className="form-label">Deadline Format: {memo.deadline.toLocaleDateString()}</label>
+          <input defaultValue={memo.deadline.toLocaleDateString()} type="text" className="form-control" id="deadline" name="deadline"/>
         </div>
+        
         <div className="mb-3">
-          <label htmlFor="progress" className="form-label">Progress</label>
-          <input type="number" className="form-control" id="progress" name="progress" />
+          <label htmlFor="progress" className="form-label">Dein Prodress</label>
+          <input defaultValue={memo.progress} type="number" className="form-control" id="progress" name="progress" />
         </div>
         <button type="submit" className="btn btn-primary">save</button>
         <button type='button' onClick={(event : React.SyntheticEvent) =>{
