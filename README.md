@@ -1,12 +1,23 @@
 # memoria
 
-## installation
+A simple TODO App for our SkSy 2023 HA :)
 
-```sh 
-# Install latest version of node.js
-npm i  
+## Installation
+
+### Requirements
+
+[NodeJS](https://nodejs.org/en) version 14+ installed
+
+### Installing dependencies
+
+```sh
+npm i
 ```
-## how to run
-```sh 
+
+### Running the project
+
+```sh
 npm run dev
 ```
+
+The app should be running at http://localhost:5173/

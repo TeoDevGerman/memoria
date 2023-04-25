@@ -1,7 +1,6 @@
-import { Memo } from './types';
+import { Memo } from './Memo';
 
 class MemoList {
-
     memos: Memo[];
 
     constructor() {
@@ -9,7 +8,6 @@ class MemoList {
     }
 
     addMemo(memo: Memo) {
-        //console.log('remove2')
         this.memos.push(memo);
     }
 
@@ -51,29 +49,27 @@ class MemoList {
                 deadline: new Date(memoObject.deadline),
                 text: memoObject.text,
                 progress: memoObject.progress,
-            }
+            };
             this.addMemo(tempMemo);
         }
     }
     toCookies() {
-        document.cookie.split(";").forEach((c) => {
+        document.cookie.split(';').forEach((c) => {
             document.cookie = c
-                .replace(/^ +/, "")
-                .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+                .replace(/^ +/, '')
+                .replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/');
         });
-        //console.log(this.memos.length)
+
         for (let i = 0; i < this.memos.length; i++) {
             const memo = this.memos[i];
             document.cookie = memo.id + '=' + JSON.stringify(memo);
         }
-
     }
 }
 
-
 const memoDB = new MemoList();
 memoDB.fromCookies();
-const anzahl = 0
+const anzahl = 0;
 
 for (let i = 0; i < anzahl; i++) {
     memoDB.addMemo({
@@ -83,6 +79,5 @@ for (let i = 0; i < anzahl; i++) {
         progress: 0,
     });
 }
-
 
 export default memoDB;
