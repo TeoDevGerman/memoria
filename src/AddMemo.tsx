@@ -19,11 +19,11 @@ function AddMemo() {
       progress: { value: string };
     };
     const text = target.text.value;
-    console.log(text)
+    //console.log(text)
     const date = target.deadline.value;
-    console.log(date)
+    //console.log(date)
     const progress = target.progress.value;
-    console.log(progress)
+    //console.log(progress)
     const memo: Memo = {
       id: memoDB.memos.length,
       text: text,

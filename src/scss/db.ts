@@ -9,7 +9,7 @@ class MemoList {
     }
 
     addMemo(memo: Memo) {
-        console.log('remove2')
+        //console.log('remove2')
         this.memos.push(memo);
     }
 
@@ -61,7 +61,7 @@ class MemoList {
                 .replace(/^ +/, "")
                 .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
         });
-        console.log(this.memos.length)
+        //console.log(this.memos.length)
         for (let i = 0; i < this.memos.length; i++) {
             const memo = this.memos[i];
             document.cookie = memo.id + '=' + JSON.stringify(memo);
