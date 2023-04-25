@@ -9,10 +9,6 @@ interface TodoItem {
   text: string
   progress: number
 }
-// dashboard with all todos in a grid // almost done
-// todo detail page with edit // done
-// todo create page with button
-// add impressum // done
 
 
 
@@ -26,20 +22,21 @@ function App() {
     <>
       <h1>Memoria</h1>
       {/* // todo list */}
-      <div className='memosTable'>
-        <div className="row row-cols-3">
+      <div className='container text-center'>
+        <div className="row row-cols-auto">
           {memos.map((memo) => (
-            <Link to={`MemoPage/${memo.id}`}>
-              {/* wir sind hier im Grid */}
-              <button type="button" className="btn btn-primary">To Memo</button>
-              <div key={memo.id}>
-                <h2>{memo.text}</h2>
-                <p>{memo.deadline.toLocaleDateString()}</p>
-                <p>{memo.progress}%</p>
-              </div>
-              {/* wir sind hier im Grid */}
-            </Link>
+
+            <div className="card col m-4 p-2" key={memo.id}>
+                <div className="card-body">
+                  <h5 className="card-title">#{memo.id} Memo</h5>
+                  <p className="card-text">{memo.text}</p>
+                  <p className="card-text">{memo.deadline.toLocaleDateString()}</p>
+                  <p className="card-text">{memo.progress}%</p>
+                  <Link to ={`MemoPage/${memo.id}`} className="btn btn-primary">Edit</Link>
+                </div>
+            </div>
           ))}
+
         </div>
       </div>
       <Link to="/AddMemo">
