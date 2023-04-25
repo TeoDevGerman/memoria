@@ -34,7 +34,7 @@ function App() {
               <button type="button" className="btn btn-primary">To Memo</button>
               <div key={memo.id}>
                 <h2>{memo.text}</h2>
-                <p>{memo.deadline.toDateString()}</p>
+                <p>{memo.deadline.toLocaleDateString()}</p>
                 <p>{memo.progress}%</p>
               </div>
               {/* wir sind hier im Grid */}
