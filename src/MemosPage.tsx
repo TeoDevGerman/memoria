@@ -1,8 +1,6 @@
 import { useLoaderData, useNavigate } from 'react-router-dom';
-import { Memo } from './Memo.ts';
-import memoDB from './db.ts';
-
-import './App.css';
+import { Memo } from './Memo';
+import { memoDB } from './db';
 
 export const MemoPage = () => {
     const navigate = useNavigate();

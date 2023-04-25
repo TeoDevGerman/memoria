@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Memo } from './Memo';
-import memoDB from './db';
-
-import './App.css';
+import { memoDB } from './db';
 
 export const App = () => {
     const [memos, setMemos] = useState<Memo[]>([]);

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Memo } from './Memo';
-import memoDB from './db';
+import { memoDB } from './db';
 
 export const AddMemo = () => {
     const navigate = useNavigate();
@@ -18,12 +18,14 @@ export const AddMemo = () => {
         const text = target.text.value;
         const date = target.deadline.value;
         const progress = target.progress.value;
+
         const memo: Memo = {
             id: memoDB.memos.length,
             text: text,
             deadline: new Date(date),
             progress: Number(progress),
         };
+
         memoDB.addMemo(memo);
         memoDB.toCookies();
         navigate(-1);
@@ -71,5 +73,3 @@ export const AddMemo = () => {
         </>
     );
 };
-
-export default AddMemo;

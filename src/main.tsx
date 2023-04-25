@@ -1,16 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider, LoaderFunctionArgs } from 'react-router-dom';
+import { createBrowserRouter, LoaderFunctionArgs, RouterProvider } from 'react-router-dom';
 
-import './index.css';
-import './Memo.ts';
 import './scss/styles.scss';
 
-import memoDB from './db.ts';
-import { App } from './App.tsx';
-import { Impressum } from './Impressum.tsx';
-import { MemoPage } from './MemosPage.tsx';
-import { AddMemo } from './AddMemo.tsx';
+import { AddMemo } from './AddMemo';
+import { App } from './App';
+import { memoDB } from './db';
+import { Impressum } from './Impressum';
+import { MemoPage } from './MemosPage';
 
 const memoList = memoDB.getMemos();
 

@@ -38,6 +38,7 @@ class MemoList {
             this.memos.splice(this.indexof(memo), 1);
         }
     }
+
     fromCookies() {
         const memos = document.cookie.split(';');
         for (let i = 0; i < memos.length; i++) {
@@ -53,6 +54,7 @@ class MemoList {
             this.addMemo(tempMemo);
         }
     }
+
     toCookies() {
         document.cookie.split(';').forEach((c) => {
             document.cookie = c
@@ -69,15 +71,5 @@ class MemoList {
 
 const memoDB = new MemoList();
 memoDB.fromCookies();
-const anzahl = 0;
 
-for (let i = 0; i < anzahl; i++) {
-    memoDB.addMemo({
-        id: i,
-        deadline: new Date(),
-        text: 'test' + i,
-        progress: 0,
-    });
-}
-
-export default memoDB;
+export { memoDB };
