@@ -1,4 +1,5 @@
 import { useLoaderData, useNavigate } from 'react-router-dom';
+import { isValidDate, isValidProgress, isValidText } from './InputValidation';
 import { Memo } from './Memo';
 import { memoDB } from './db';
 
@@ -41,18 +42,6 @@ export const MemoPage = () => {
         memoDB.memos[i].progress = Number(progress);
         memoDB.toCookies();
         navigate(-1);
-    };
-
-    const isValidText = (t: string) => {
-        return 161 > t.length && t.length > 0;
-    };
-
-    const isValidProgress = (p: number) => {
-        return p >= 0 && p <= 100;
-    };
-
-    const isValidDate = (d: Date) => {
-        return d instanceof Date && !isNaN(d.getTime());
     };
 
     return (

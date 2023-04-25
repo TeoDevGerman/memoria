@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { isValidDate, isValidProgress, isValidText } from './InputValidation';
 import { Memo } from './Memo';
 import { memoDB } from './db';
 
@@ -18,6 +19,21 @@ export const AddMemo = () => {
         const text = target.text.value;
         const date = target.deadline.value;
         const progress = target.progress.value;
+
+        if (!isValidText(text)) {
+            alert('Bitte gib einen Text von höchsten 160 Zeichen an');
+            return;
+        }
+
+        if (!isValidProgress(Number(progress))) {
+            alert('Bitte gib dein Progress als Zahl zwischen 0 und 100 an');
+            return;
+        }
+
+        if (!isValidDate(new Date(date))) {
+            alert('Bitte gib ein gültiges Datum ein');
+            return;
+        }
 
         const memo: Memo = {
             id: memoDB.memos.length,
