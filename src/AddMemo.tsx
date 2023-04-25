@@ -42,7 +42,7 @@ function AddMemo() {
       <form id='editForm' onSubmit={handle}>
         <div className="mb-3">
           <label htmlFor="text" className="form-label">Text</label>
-          <input type="text" className="form-control" id="text" aria-describedby="text" name="text"/>
+          <input placeholder='Deine Memo' type="text" className="form-control" id="text" aria-describedby="text" name="text"/>
         </div>
         <div className="mb-3">
           <label htmlFor="deadline" className="form-label">Deadline</label>
@@ -50,7 +50,7 @@ function AddMemo() {
         </div>
         <div className="mb-3">
           <label htmlFor="progress" className="form-label">Progress</label>
-          <input type="number" className="form-control" id="progress" name="progress" />
+          <input placeholder='Fortschritt in %' type="number" className="form-control" id="progress" name="progress" />
         </div>
         <button type="submit" className="btn btn-primary">add</button>
       </form>
