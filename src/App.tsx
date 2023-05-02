@@ -1,45 +1,28 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Memo } from './Memo';
-import { memoDB } from './db';
+import { Outlet } from 'react-router-dom';
 
 export const App = () => {
-    const [memos, setMemos] = useState<Memo[]>([]);
-
-    useEffect(() => setMemos(memoDB.getMemos()), []);
-
+    const [isDarmodeOn, setDarkmode] = useState(false);
+    useEffect(() => {
+        if (isDarmodeOn) {
+            document.documentElement.setAttribute('data-bs-theme', 'dark');
+        } else {
+            document.documentElement.setAttribute('data-bs-theme', 'light');
+        }
+    }, [isDarmodeOn]);
     return (
         <>
             <h1>Memoria</h1>
-
-            {/* todo list */}
-            <div className="container text-center">
-                <div className="row row-cols-auto">
-                    {memos.map((memo) => (
-                        <div className="card col m-4 p-2" key={memo.id}>
-                            <div className="card-body">
-                                <h5 className="card-title">#{memo.id} Memo</h5>
-                                <p className="card-text">{memo.text}</p>
-                                <p className="card-text">{memo.deadline.toLocaleDateString()}</p>
-                                <p className="card-text">{memo.progress}%</p>
-                                <Link to={`MemoPage/${memo.id}`} className="btn btn-primary">
-                                    Edit
-                                </Link>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+            <button
+                type="button"
+                onClick={() => setDarkmode((currentDarkmodeSetting) => !currentDarkmodeSetting)}
+                className="btn btn-primary"
+            >
+                {isDarmodeOn ? 'Turn the Lights on!' : 'Turn the Lights off!'}
+            </button>
+            <div>
+                <Outlet />
             </div>
-
-            <Link to="/AddMemo">
-                <button type="button" className="btn btn-primary">
-                    Add Memo
-                </button>
-            </Link>
-
-            <footer>
-                <Link to="/Impressum">Impressum</Link>
-            </footer>
         </>
     );
 };

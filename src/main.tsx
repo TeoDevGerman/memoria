@@ -8,7 +8,8 @@ import { AddMemo } from './AddMemo';
 import { App } from './App';
 import { memoDB } from './db';
 import { Impressum } from './Impressum';
-import { MemoPage } from './MemosPage';
+import { MemoList } from './MemoList';
+import { MemoPage } from './MemoPage';
 
 const memoList = memoDB.getMemos();
 
@@ -16,25 +17,32 @@ const router = createBrowserRouter([
     {
         path: '/',
         element: <App />,
-    },
-    {
-        path: '/Impressum',
-        element: <Impressum />,
-    },
-    {
-        path: '/AddMemo',
-        element: <AddMemo />,
-    },
-    {
-        path: 'MemoPage/:memoId',
-        element: <MemoPage />,
-        loader: ({ params }: LoaderFunctionArgs) => {
-            for (let i = 0; i < memoList.length; i++) {
-                if (memoList[i].id == Number(params.memoId)) {
-                    return memoList[i];
-                }
-            }
-        },
+        children: [
+            {
+                path: 'MemoPage/:memoId',
+                element: <MemoPage />,
+
+                loader: ({ params }: LoaderFunctionArgs) => {
+                    for (let i = 0; i < memoList.length; i++) {
+                        if (memoList[i].id == Number(params.memoId)) {
+                            return memoList[i];
+                        }
+                    }
+                },
+            },
+            {
+                path: '',
+                element: <MemoList />,
+            },
+            {
+                path: '/Impressum',
+                element: <Impressum />,
+            },
+            {
+                path: '/AddMemo',
+                element: <AddMemo />,
+            },
+        ],
     },
 ]);
 
