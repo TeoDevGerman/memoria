@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Memo } from './Memo';
 import { memoDB } from './db';
+import { Memo } from '@shared';
 
 export const MemoList = () => {
     const [memos, setMemos] = useState<Memo[]>([]);

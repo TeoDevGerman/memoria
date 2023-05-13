@@ -1,6 +1,6 @@
+import { Memo } from '@shared';
 import { useNavigate } from 'react-router-dom';
 import { isValidDate, isValidProgress, isValidText } from './InputValidation';
-import { Memo } from './Memo';
 import { memoDB } from './db';
 
 export const AddMemo = () => {

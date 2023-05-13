@@ -1,7 +1,7 @@
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import { isValidDate, isValidProgress, isValidText } from './InputValidation';
-import { Memo } from './Memo';
 import { memoDB } from './db';
+import { Memo } from '@shared';
 
 export const MemoPage = () => {
     const navigate = useNavigate();
