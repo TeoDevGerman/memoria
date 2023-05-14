@@ -1,67 +1,68 @@
-import { Memo } from '@shared';
+import { MemoToAdd } from '@shared';
 import { useNavigate } from 'react-router-dom';
-import { isValidDate, isValidProgress, isValidText } from './InputValidation';
-import { memoDB } from './db';
+import { useMemosContext } from './useMemosContext';
 
 export const AddMemo = () => {
     const navigate = useNavigate();
+
+    const { addMemo } = useMemosContext();
 
     const handleSubmit = (event: React.SyntheticEvent) => {
         event.preventDefault();
         if (event.target === null) return;
 
         const target = event.target as typeof event.target & {
-            text: { value: string };
+            title: { value: string };
+            description: { value: string };
             deadline: { value: string };
             progress: { value: string };
         };
 
-        const text = target.text.value;
+        const title = target.title.value;
+        const description = target.description.value;
         const date = target.deadline.value;
         const progress = target.progress.value;
 
-        if (!isValidText(text)) {
-            alert('Bitte gib einen Text von höchsten 160 Zeichen an');
-            return;
-        }
-
-        if (!isValidProgress(Number(progress))) {
-            alert('Bitte gib dein Progress als Zahl zwischen 0 und 100 an');
-            return;
-        }
-
-        if (!isValidDate(new Date(date))) {
-            alert('Bitte gib ein gültiges Datum ein');
-            return;
-        }
-
-        const memo: Memo = {
-            id: memoDB.memos.length,
-            text: text,
-            deadline: new Date(date),
+        const memo: MemoToAdd = {
+            title,
+            description,
+            deadline: new Date(date).toISOString(),
             progress: Number(progress),
         };
 
-        memoDB.addMemo(memo);
-        memoDB.toCookies();
+        addMemo(memo);
         navigate(-1);
     };
 
     return (
         <>
-            <h1>AddMemoPage</h1>
+            <h1>Memo hinzufügen</h1>
+
             <form id="editForm" onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="text" className="form-label">
-                        Text
+                        Titel
                     </label>
                     <input
                         placeholder="Deine Memo"
                         type="text"
                         className="form-control"
-                        id="text"
-                        aria-describedby="text"
-                        name="text"
+                        id="title"
+                        aria-describedby="title"
+                        name="title"
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="text" className="form-label">
+                        Description
+                    </label>
+                    <input
+                        placeholder="Beschreibung (optional)"
+                        type="text"
+                        className="form-control"
+                        id="description"
+                        aria-describedby="description"
+                        name="description"
                     />
                 </div>
                 <div className="mb-3">

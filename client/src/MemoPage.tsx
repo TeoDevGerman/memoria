@@ -1,75 +1,111 @@
-import { useLoaderData, useNavigate } from 'react-router-dom';
-import { isValidDate, isValidProgress, isValidText } from './InputValidation';
-import { memoDB } from './db';
-import { Memo } from '@shared';
+import { MemoToAdd } from '@shared';
+import { useNavigate, useParams } from 'react-router-dom';
+import { OfflineAlert } from './OfflineAlert';
+import { useMemosContext } from './useMemosContext';
 
 export const MemoPage = () => {
     const navigate = useNavigate();
-    const memo = useLoaderData() as Memo;
+    const memoId = useParams().memoId;
+
+    const { state, updateMemo, deleteMemo } = useMemosContext();
+
+    const memo =
+        state.type === 'DATA' || state.type === 'NETWORK_ERROR'
+            ? state.memos.find((memo) => memo._id === memoId)
+            : undefined;
+
+    const dateToFormat = (date: Date) => {
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+
+        return `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
+    };
 
     const handleSubmit = (event: React.SyntheticEvent) => {
         event.preventDefault();
+        if (!memoId) return;
         if (event.target === null) return;
 
         const target = event.target as typeof event.target & {
-            text: { value: string };
+            title: { value: string };
+            description: { value: string };
             deadline: { value: string };
             progress: { value: string };
         };
 
-        const text = target.text.value;
+        const title = target.title.value;
+        const description = target.description.value;
         const date = target.deadline.value;
         const progress = target.progress.value;
 
-        if (!isValidText(text)) {
-            alert('Bitte gib einen Text von höchsten 160 Zeichen an');
-            return;
-        }
-
-        if (!isValidProgress(Number(progress))) {
-            alert('Bitte gib dein Progress als Zahl zwischen 0 und 100 an');
-            return;
-        }
-
-        if (!isValidDate(new Date(date))) {
-            alert('Bitte gib ein gültiges Datum ein');
-            return;
-        }
-
-        const i = memoDB.indexof(memo);
-        memoDB.memos[i].text = text;
-        memoDB.memos[i].deadline = new Date(date);
-        memoDB.memos[i].progress = Number(progress);
-        memoDB.toCookies();
+        const memo: MemoToAdd = {
+            title,
+            description,
+            deadline: new Date(date).toISOString(),
+            progress: Number(progress),
+        };
+        updateMemo(memoId, memo);
         navigate(-1);
     };
 
+    if (state.type === 'LOADING') {
+        return (
+            <div className="spinner-border" role="status">
+                <span className="visually-hidden">Loading...</span>
+            </div>
+        );
+    }
+
+    if (state.type === 'ERROR') {
+        return <div>An error occured: {state.message}</div>;
+    }
+
+    if (!memo) {
+        return <div>Memo not found</div>;
+    }
+
     return (
         <>
-            <h1>MemoPage</h1>
+            {state.type === 'NETWORK_ERROR' && <OfflineAlert />}
 
-            <p>{memo.deadline.toDateString()}</p>
-            {/* creates a form to edit the memo and shows already existing Information */}
+            <h2>{memo.title}</h2>
+            <p>{new Date(memo.deadline).toDateString()}</p>
             <form id="editForm" onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="text" className="form-label">
-                        Deine Memo
+                        Titel
                     </label>
                     <input
-                        defaultValue={memo.text}
+                        defaultValue={memo.title}
+                        placeholder="Deine Memo"
                         type="text"
                         className="form-control"
-                        id="text"
-                        aria-describedby="text"
-                        name="text"
+                        id="title"
+                        aria-describedby="title"
+                        name="title"
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="text" className="form-label">
+                        Description
+                    </label>
+                    <input
+                        defaultValue={memo.description}
+                        placeholder="Beschreibung (optional)"
+                        type="text"
+                        className="form-control"
+                        id="description"
+                        aria-describedby="description"
+                        name="description"
                     />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="deadline" className="form-label">
-                        Deadline Format: {memo.deadline.toLocaleDateString()}
+                        Deadline Format: {dateToFormat(new Date(memo.deadline))}
                     </label>
                     <input
-                        defaultValue={memo.deadline.toLocaleDateString()}
+                        defaultValue={dateToFormat(new Date(memo.deadline))}
                         type="text"
                         className="form-control"
                         id="deadline"
@@ -88,21 +124,35 @@ export const MemoPage = () => {
                         name="progress"
                     />
                 </div>
-                <button type="submit" className="btn btn-primary m-2">
-                    save
+
+                <button
+                    type="submit"
+                    className="btn btn-primary m-2"
+                    disabled={state.type === 'NETWORK_ERROR'}
+                >
+                    Save
                 </button>
 
                 <button
                     type="button"
                     onClick={(event: React.SyntheticEvent) => {
                         event.preventDefault();
-                        memoDB.removeMemo(memo);
-                        memoDB.toCookies();
+                        if (!memoId) return;
+                        deleteMemo(memoId);
                         navigate(-1);
                     }}
                     className="btn btn-danger"
+                    disabled={state.type === 'NETWORK_ERROR'}
                 >
-                    remove
+                    Remove
+                </button>
+
+                <button
+                    className="btn btn-secondary m-2"
+                    onClick={() => navigate('/')}
+                    disabled={state.type === 'NETWORK_ERROR'}
+                >
+                    Cancel
                 </button>
             </form>
         </>

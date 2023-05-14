@@ -1,58 +1,41 @@
-import { Memo } from "@shared";
+import { MemoFromApi } from '@shared';
 
 class MemoList {
-    memos: Memo[];
+    private memos: MemoFromApi[];
 
     constructor() {
         this.memos = [];
     }
 
-    addMemo(memo: Memo) {
-        this.memos.push(memo);
+    setMemos(memos: MemoFromApi[]) {
+        this.memos = memos;
     }
 
     getMemos() {
         return this.memos;
     }
 
-    contains(memo: Memo) {
-        for (let i = 0; i < this.memos.length; i++) {
-            if (this.memos[i].id === memo.id) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    indexof(memo: Memo) {
-        for (let i = 0; i < this.memos.length; i++) {
-            if (this.memos[i].id === memo.id) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    removeMemo(memo: Memo) {
-        if (this.contains(memo)) {
-            this.memos.splice(this.indexof(memo), 1);
-        }
-    }
-
     fromCookies() {
         const memos = document.cookie.split(';');
+
+        const tempMemos: MemoFromApi[] = [];
         for (let i = 0; i < memos.length; i++) {
             const memo = memos[i].split('=');
             if (memo.length < 2) continue;
             const memoObject = JSON.parse(memo[1]);
-            const tempMemo: Memo = {
-                id: memoObject.id,
-                deadline: new Date(memoObject.deadline),
-                text: memoObject.text,
+            const tempMemo: MemoFromApi = {
+                _id: memoObject._id,
+                deadline: memoObject.deadline,
+                title: memoObject.title,
+                description: memoObject.description,
                 progress: memoObject.progress,
+                createdAt: memoObject.createdAt,
+                updatedAt: memoObject.updatedAt,
+                deletedAt: memoObject.deletedAt,
             };
-            this.addMemo(tempMemo);
+            tempMemos.push(tempMemo);
         }
+        this.setMemos(tempMemos);
     }
 
     toCookies() {
@@ -64,7 +47,7 @@ class MemoList {
 
         for (let i = 0; i < this.memos.length; i++) {
             const memo = this.memos[i];
-            document.cookie = memo.id + '=' + JSON.stringify(memo);
+            document.cookie = memo._id + '=' + JSON.stringify(memo);
         }
     }
 }

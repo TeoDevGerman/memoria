@@ -1,29 +1,42 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { memoDB } from './db';
-import { Memo } from '@shared';
+import { OfflineAlert } from './OfflineAlert';
+import { useMemosContext } from './useMemosContext';
 
 export const MemoList = () => {
-    const [memos, setMemos] = useState<Memo[]>([]);
+    const { state } = useMemosContext();
 
-    useEffect(() => setMemos(memoDB.getMemos()), []);
+    if (state.type === 'LOADING') {
+        return (
+            <div className="spinner-border" role="status">
+                <span className="visually-hidden">Loading...</span>
+            </div>
+        );
+    }
+
+    if (state.type === 'ERROR') {
+        return <div>An error occured: {state.message}</div>;
+    }
 
     return (
         <>
+            {state.type === 'NETWORK_ERROR' && <OfflineAlert />}
 
-            {/* todo list */}
             <div className="container text-center">
-                <div className="row row-cols-auto">
-                    {memos.map((memo) => (
-                        <div className="card col m-4 p-2" key={memo.id}>
-                            <div className="card-body">
-                                <h5 className="card-title">#{memo.id} Memo</h5>
-                                <p className="card-text">{memo.text}</p>
-                                <p className="card-text">{memo.deadline.toLocaleDateString()}</p>
-                                <p className="card-text">{memo.progress}%</p>
-                                <Link to={`MemoPage/${memo.id}`} className="btn btn-primary">
-                                    Edit
-                                </Link>
+                <div className="row">
+                    {state.memos.map((memo) => (
+                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 p-2">
+                            <div className="card col p-2" key={memo._id}>
+                                <div className="card-body">
+                                    <h5 className="card-title">{memo.title}</h5>
+                                    <p className="card-text">{memo.description}</p>
+                                    <p className="card-text">
+                                        {new Date(memo.deadline).toLocaleDateString()}
+                                    </p>
+                                    <p className="card-text">{memo.progress}%</p>
+                                    <Link to={`MemoPage/${memo._id}`} className="btn btn-primary">
+                                        Edit
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                     ))}
