@@ -2,6 +2,10 @@
 
 A simple TODO App for our SkSy 2023 HA :)
 
+## API Documentation
+
+Available [here](https://documenter.getpostman.com/view/27393675/2s93kz4jq3)
+
 ## Installation
 
 ### Requirements
